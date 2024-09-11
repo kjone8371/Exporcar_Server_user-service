@@ -1,0 +1,554 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>로그인</title>-->
+<!--    <style>-->
+<!--        body {-->
+<!--            font-family: Arial, sans-serif;-->
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+<!--            align-items: center;-->
+<!--            height: 100vh;-->
+<!--            background-color: #f4f4f4;-->
+<!--        }-->
+<!--        .login-container {-->
+<!--            background: #fff;-->
+<!--            padding: 20px;-->
+<!--            border-radius: 5px;-->
+<!--            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);-->
+<!--            width: 300px;-->
+<!--        }-->
+<!--        .login-container h2 {-->
+<!--            margin-bottom: 20px;-->
+<!--        }-->
+<!--        .login-container input {-->
+<!--            width: 100%;-->
+<!--            padding: 10px;-->
+<!--            margin: 5px 0 15px;-->
+<!--            border: 1px solid #ddd;-->
+<!--            border-radius: 5px;-->
+<!--        }-->
+<!--        .login-container button {-->
+<!--            width: 100%;-->
+<!--            padding: 10px;-->
+<!--            border: none;-->
+<!--            border-radius: 5px;-->
+<!--            background: #007bff;-->
+<!--            color: #fff;-->
+<!--            font-size: 16px;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+<!--        .login-container button:hover {-->
+<!--            background: #0056b3;-->
+<!--        }-->
+<!--        .error-message {-->
+<!--            color: red;-->
+<!--            margin-top: 10px;-->
+<!--        }-->
+<!--        .user-info {-->
+<!--            margin-top: 20px;-->
+<!--        }-->
+<!--        .hidden {-->
+<!--            display: none;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="login-container" id="login-container">-->
+<!--    <h2>로그인</h2>-->
+<!--    <input type="email" id="email" placeholder="이메일" required>-->
+<!--    <input type="password" id="password" placeholder="비밀번호" required>-->
+<!--    <button type="button" onclick="submitLogin()">로그인</button>-->
+<!--    <div id="error-message" class="error-message"></div>-->
+<!--</div>-->
+
+<!--<div class="user-info hidden" id="user-info">-->
+<!--    <h3>사용자 정보</h3>-->
+<!--    <p><strong>이메일:</strong> <span id="user-email"></span></p>-->
+<!--    <p><strong>유저 이름:</strong> <span id="user-username"></span></p>-->
+<!--    <p><strong>나이:</strong> <span id="user-age"></span></p>-->
+<!--    <p><strong>이미지 ID:</strong> <span id="user-image"></span></p>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    function submitLogin() {-->
+<!--        const email = document.getElementById('email').value;-->
+<!--        const password = document.getElementById('password').value;-->
+
+<!--        const data = {-->
+<!--            email: email,-->
+<!--            password: password-->
+<!--        };-->
+
+<!--        fetch('/v1/sign/signin', {-->
+<!--            method: 'POST',-->
+<!--            headers: {-->
+<!--                'Content-Type': 'application/json',-->
+<!--            },-->
+<!--            body: JSON.stringify(data),-->
+<!--        })-->
+<!--            .then(response => {-->
+<!--                if (!response.ok) {-->
+<!--                    throw new Error('로그인에 실패했습니다.');-->
+<!--                }-->
+<!--                return response.json();-->
+<!--            })-->
+<!--            .then(data => {-->
+<!--                alert('로그인 성공!');-->
+<!--                document.getElementById('login-container').classList.add('hidden'); // Hide login form-->
+<!--                fetchUserInfo(); // 로그인 후 사용자 정보 요청-->
+<!--            })-->
+<!--            .catch(error => {-->
+<!--                document.getElementById('error-message').textContent = error.message;-->
+<!--            });-->
+<!--    }-->
+
+<!--    function fetchUserInfo() {-->
+<!--        fetch('/v1/user/me', {-->
+<!--            method: 'GET',-->
+<!--            headers: {-->
+<!--                'Accept': 'application/json',-->
+<!--            },-->
+<!--        })-->
+<!--            .then(response => {-->
+<!--                if (!response.ok) {-->
+<!--                    throw new Error('사용자 정보를 가져오는 데 실패했습니다.');-->
+<!--                }-->
+<!--                return response.json();-->
+<!--            })-->
+<!--            .then(data => {-->
+<!--                document.getElementById('user-email').textContent = data.email || '정보 없음';-->
+<!--                document.getElementById('user-username').textContent = data.username || '정보 없음';-->
+<!--                document.getElementById('user-age').textContent = data.age || '정보 없음';-->
+<!--                document.getElementById('user-image').textContent = data.image || '정보 없음';-->
+<!--                document.getElementById('user-info').classList.remove('hidden'); // Show user info-->
+<!--            })-->
+<!--            .catch(error => {-->
+<!--                document.getElementById('user-info').innerHTML = `<p class="error-message">${error.message}</p>`;-->
+<!--            });-->
+<!--    }-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>로그인</title>-->
+<!--    <style>-->
+<!--        body {-->
+<!--            font-family: Arial, sans-serif;-->
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+<!--            align-items: center;-->
+<!--            height: 100vh;-->
+<!--            background-color: #f4f4f4;-->
+<!--        }-->
+<!--        .login-container {-->
+<!--            background: #fff;-->
+<!--            padding: 20px;-->
+<!--            border-radius: 5px;-->
+<!--            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);-->
+<!--            width: 300px;-->
+<!--        }-->
+<!--        .login-container h2 {-->
+<!--            margin-bottom: 20px;-->
+<!--        }-->
+<!--        .login-container input {-->
+<!--            width: 100%;-->
+<!--            padding: 10px;-->
+<!--            margin: 5px 0 15px;-->
+<!--            border: 1px solid #ddd;-->
+<!--            border-radius: 5px;-->
+<!--        }-->
+<!--        .login-container button {-->
+<!--            width: 100%;-->
+<!--            padding: 10px;-->
+<!--            border: none;-->
+<!--            border-radius: 5px;-->
+<!--            background: #007bff;-->
+<!--            color: #fff;-->
+<!--            font-size: 16px;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+<!--        .login-container button:hover {-->
+<!--            background: #0056b3;-->
+<!--        }-->
+<!--        .error-message {-->
+<!--            color: red;-->
+<!--            margin-top: 10px;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="login-container" id="login-container">-->
+<!--    <h2>로그인</h2>-->
+<!--    <input type="email" id="email" placeholder="이메일" required>-->
+<!--    <input type="password" id="password" placeholder="비밀번호" required>-->
+<!--    <button type="button" onclick="submitLogin()">로그인</button>-->
+<!--    <div id="error-message" class="error-message"></div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    // 암호화된 요청 예제 (클라이언트 측)-->
+<!--    function encryptData(data) {-->
+<!--        // 간단한 암호화 로직 또는 라이브러리 사용-->
+<!--        return btoa(JSON.stringify(data)); // Base64 인코딩 예제-->
+<!--    }-->
+
+<!--    function submitLogin() {-->
+<!--        const email = document.getElementById('email').value;-->
+<!--        const password = document.getElementById('password').value;-->
+
+<!--        const data = {-->
+<!--            email: email,-->
+<!--            password: password-->
+<!--        };-->
+
+<!--        const encryptedData = encryptData(data);-->
+
+<!--        fetch('/v1/sign/signin', {-->
+<!--            method: 'POST',-->
+<!--            headers: {-->
+<!--                'Content-Type': 'application/json',-->
+<!--            },-->
+<!--            body: JSON.stringify({ data: encryptedData }), // 암호화된 데이터 전송-->
+<!--        })-->
+<!--            .then(response => response.json())-->
+<!--            .then(data => {-->
+<!--                alert('로그인 성공!');-->
+<!--                window.location.href = '/v1/user/me'; // 로그인 후 사용자 정보 페이지로 리다이렉트-->
+<!--            })-->
+<!--            .catch(error => {-->
+<!--                document.getElementById('error-message').textContent = error.message;-->
+<!--            });-->
+<!--    }-->
+
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .login-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .login-container h2 {
+            margin-bottom: 20px;
+        }
+        .login-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #007bff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .login-container button:hover {
+            background: #0056b3;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+        .user-info {
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="login-container" id="login-container">
+    <h2>로그인</h2>
+    <input type="email" id="email" placeholder="이메일" required>
+    <input type="password" id="password" placeholder="비밀번호" required>
+    <button type="button" onclick="submitLogin()">로그인</button>
+    <div id="error-message" class="error-message"></div>
+</div>
+
+<div class="user-info hidden" id="user-info">
+    <h3>사용자 정보</h3>
+    <p><strong>이메일:</strong> <span id="user-email"></span></p>
+    <p><strong>유저 이름:</strong> <span id="user-username"></span></p>
+    <p><strong>나이:</strong> <span id="user-age"></span></p>
+    <p><strong>이미지 ID:</strong> <span id="user-image"></span></p>
+</div>
+
+<script>
+    function submitLogin() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        const data = {
+            email: email,
+            password: password
+        };
+
+        fetch('/v1/sign/signin', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('로그인에 실패했습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('로그인 성공!');
+                document.getElementById('login-container').classList.add('hidden');
+                fetchUserInfo();
+            })
+            .catch(error => {
+                document.getElementById('error-message').textContent = error.message;
+            });
+    }
+
+    function fetchUserInfo() {
+        fetch('/v1/user/me', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('사용자 정보를 가져오는 데 실패했습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('user-email').textContent = data.email || '정보 없음';
+                document.getElementById('user-username').textContent = data.username || '정보 없음';
+                document.getElementById('user-age').textContent = data.age || '정보 없음';
+                document.getElementById('user-image').textContent = data.image || '정보 없음';
+                document.getElementById('user-info').classList.remove('hidden'); // Show user info
+            })
+            .catch(error => {
+                document.getElementById('user-info').innerHTML = `<p class="error-message">${error.message}</p>`;
+            });
+    }
+
+    // function encryptData(data) {
+    //     // 예시로 Base64 인코딩 사용
+    //     return btoa(JSON.stringify(data));
+    // }
+    //
+    // function submitLogin() {
+    //     const email = document.getElementById('email').value;
+    //     const password = document.getElementById('password').value;
+    //
+    //     const data = {
+    //         email: email,
+    //         password: password
+    //     };
+    //
+    //     const encryptedData = encryptData(data);
+    //
+    //     fetch('/v1/sign/signin', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({ data: encryptedData }), // 암호화된 데이터 전송
+    //     })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             alert('로그인 성공!');
+    //             window.location.href = '/v1/user/me'; // 로그인 후 사용자 정보 페이지로 리다이렉트
+    //         })
+    //         .catch(error => {
+    //             document.getElementById('error-message').textContent = error.message;
+    //         });
+    // }
+    // function submitLogin() {
+    //     const email = document.getElementById('email').value;
+    //     const password = document.getElementById('password').value;
+    //
+    //     const data = {
+    //         email: email,
+    //         password: password
+    //     };
+    //
+    //     fetch('/v1/sign/signin', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(data),
+    //     })
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 throw new Error('로그인 실패');
+    //             }
+    //             return response.json();
+    //         })
+    //         .then(data => {
+    //             alert('로그인 성공!');
+    //             window.location.href = '/v1/user/me'; // 로그인 후 사용자 정보 페이지로 리다이렉트
+    //         })
+    //         .catch(error => {
+    //             document.getElementById('error-message').textContent = error.message;
+    //         });
+    // }
+
+
+</script>
+</body>
+</html>
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>로그인</title>-->
+<!--    <style>-->
+<!--        body {-->
+<!--            font-family: Arial, sans-serif;-->
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+<!--            align-items: center;-->
+<!--            height: 100vh;-->
+<!--            background-color: #f4f4f4;-->
+<!--        }-->
+<!--        .login-container {-->
+<!--            background: #fff;-->
+<!--            padding: 20px;-->
+<!--            border-radius: 5px;-->
+<!--            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);-->
+<!--            width: 300px;-->
+<!--        }-->
+<!--        .login-container h2 {-->
+<!--            margin-bottom: 20px;-->
+<!--        }-->
+<!--        .login-container input,-->
+<!--        .login-container select {-->
+<!--            width: 100%;-->
+<!--            padding: 10px;-->
+<!--            margin: 5px 0 15px;-->
+<!--            border: 1px solid #ddd;-->
+<!--            border-radius: 5px;-->
+<!--        }-->
+<!--        .login-container button {-->
+<!--            width: 100%;-->
+<!--            padding: 10px;-->
+<!--            border: none;-->
+<!--            border-radius: 5px;-->
+<!--            background: #007bff;-->
+<!--            color: #fff;-->
+<!--            font-size: 16px;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+<!--        .login-container button:hover {-->
+<!--            background: #0056b3;-->
+<!--        }-->
+<!--        .error-message {-->
+<!--            color: red;-->
+<!--            margin-top: 10px;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="login-container">-->
+<!--    <h2>로그인</h2>-->
+<!--    <form id="loginForm">-->
+<!--        <select id="userType">-->
+<!--            <option value="" disabled selected>회원 유형 선택</option>-->
+<!--            <option value="user">일반 사용자</option>-->
+<!--            <option value="organization_user">조직 사용자</option>-->
+<!--        </select>-->
+<!--        <input type="email" id="email" placeholder="이메일" required>-->
+<!--        <input type="password" id="password" placeholder="비밀번호" required>-->
+<!--        <button type="button" onclick="submitForm()">로그인</button>-->
+<!--    </form>-->
+<!--    <div id="error-message" class="error-message"></div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    function submitForm() {-->
+<!--        const userType = document.getElementById('userType').value;-->
+<!--        const email = document.getElementById('email').value;-->
+<!--        const password = document.getElementById('password').value;-->
+
+<!--        if (userType === '' || email === '' || password === '') {-->
+<!--            document.getElementById('error-message').textContent = '모든 필수 입력 필드를 채워야 합니다.';-->
+<!--            return;-->
+<!--        }-->
+
+<!--        const data = {-->
+<!--            email: email,-->
+<!--            password: password,-->
+<!--            userType: userType-->
+<!--        };-->
+
+<!--        fetch('/v1/sign/signin', {-->
+<!--            method: 'POST',-->
+<!--            headers: {-->
+<!--                'Content-Type': 'application/json',-->
+<!--            },-->
+<!--            body: JSON.stringify(data),-->
+<!--        })-->
+<!--            .then(response => {-->
+<!--                if (!response.ok) {-->
+<!--                    throw new Error('로그인에 실패했습니다.');-->
+<!--                }-->
+<!--                return response.text();-->
+<!--            })-->
+<!--            .then(message => {-->
+<!--                alert(message);-->
+<!--                window.location.href = '/v1/user/me'; // 로그인 성공 후 사용자 페이지로 이동-->
+<!--            })-->
+<!--            .catch(error => {-->
+<!--                document.getElementById('error-message').textContent = error.message;-->
+<!--            });-->
+<!--    }-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
+
