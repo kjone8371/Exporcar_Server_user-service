@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    .signup-container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+    .signup-container h2 {
+      margin-bottom: 20px;
+    }
+    .signup-container input {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .signup-container button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background: #007bff;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .signup-container button:hover {
+      background: #0056b3;
+    }
+    .error-message {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="signup-container">
+  <h2>회원가입</h2>
+  <form id="signupForm">
+    <input type="email" id="email" placeholder="이메일" required>
+    <input type="password" id="password" placeholder="비밀번호" required>
+    <input type="text" id="username" placeholder="유저 이름" required>
+    <input type="number" id="age" placeholder="나이" required>
+      <input type="number" id="phone" placeholder="전번" required>
+      <input type="text" id="image" placeholder="이미지 ID (숫자)" required>
+    <button type="button" onclick="submitForm()">회원가입</button>
+  </form>
+  <div id="error-message" class="error-message"></div>
+</div>
+
+<script>
+  function submitForm() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const username = document.getElementById('username').value;
+    const age = parseInt(document.getElementById('age').value);
+    const image = document.getElementById('image').value;
+
+    const data = {
+      email: email,
+      password: password,
+      username: username,
+      age: age,
+      image: image
+    };
+
+    fetch('/v1/sign/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('회원가입에 실패했습니다.');
+              }
+              return response.text();
+            })
+            .then(message => {
+              alert(message);
+              // Optionally redirect to another page
+              window.location.href = '/auth/login'; // Redirect to login page
+            })
+            .catch(error => {
+              document.getElementById('error-message').textContent = error.message;
+            });
+  }
+</script>
+</body>
+</html>
+
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  <title>회원가입</title>-->
+<!--  <style>-->
+<!--    body {-->
+<!--      font-family: Arial, sans-serif;-->
+<!--      display: flex;-->
+<!--      justify-content: center;-->
+<!--      align-items: center;-->
+<!--      height: 100vh;-->
+<!--      background-color: #f4f4f4;-->
+<!--    }-->
+<!--    .signup-container {-->
+<!--      background: #fff;-->
+<!--      padding: 20px;-->
+<!--      border-radius: 5px;-->
+<!--      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);-->
+<!--      width: 300px;-->
+<!--    }-->
+<!--    .signup-container h2 {-->
+<!--      margin-bottom: 20px;-->
+<!--    }-->
+<!--    .signup-container input,-->
+<!--    .signup-container select {-->
+<!--      width: 100%;-->
+<!--      padding: 10px;-->
+<!--      margin: 5px 0 15px;-->
+<!--      border: 1px solid #ddd;-->
+<!--      border-radius: 5px;-->
+<!--    }-->
+<!--    .signup-container button {-->
+<!--      width: 100%;-->
+<!--      padding: 10px;-->
+<!--      border: none;-->
+<!--      border-radius: 5px;-->
+<!--      background: #007bff;-->
+<!--      color: #fff;-->
+<!--      font-size: 16px;-->
+<!--      cursor: pointer;-->
+<!--    }-->
+<!--    .signup-container button:hover {-->
+<!--      background: #0056b3;-->
+<!--    }-->
+<!--    .error-message {-->
+<!--      color: red;-->
+<!--      margin-top: 10px;-->
+<!--    }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="signup-container">-->
+<!--  <h2>회원가입</h2>-->
+<!--  <form id="signupForm">-->
+<!--    <select id="userType" onchange="toggleFields()">-->
+<!--      <option value="" disabled selected>회원 유형 선택</option>-->
+<!--      <option value="user">일반 사용자</option>-->
+<!--      <option value="organization_user">조직 사용자</option>-->
+<!--    </select>-->
+<!--    <select id="role" class="hidden">-->
+<!--      <option value="" disabled selected>권한 선택</option>-->
+<!--      <option value="OWNER">OWNER</option>-->
+<!--      <option value="EMPLOYEE">EMPLOYEE</option>-->
+<!--    </select>-->
+<!--    <input type="email" id="email" placeholder="이메일" required>-->
+<!--    <input type="password" id="password" placeholder="비밀번호" required>-->
+<!--    <input type="text" id="username" placeholder="유저 이름" required>-->
+<!--    <input type="number" id="age" placeholder="나이" required>-->
+<!--    <input type="text" id="phone" placeholder="전화번호" required>-->
+<!--    <input type="text" id="image" placeholder="이미지 ID (숫자)" required>-->
+<!--    <button type="button" onclick="submitForm()">회원가입</button>-->
+<!--  </form>-->
+<!--  <div id="error-message" class="error-message"></div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--  function toggleFields() {-->
+<!--    const userType = document.getElementById('userType').value;-->
+<!--    const roleField = document.getElementById('role');-->
+<!--    if (userType === 'organization_user') {-->
+<!--      roleField.classList.remove('hidden');-->
+<!--    } else {-->
+<!--      roleField.classList.add('hidden');-->
+<!--    }-->
+<!--  }-->
+
+<!--  function submitForm() {-->
+<!--    const userType = document.getElementById('userType').value;-->
+<!--    const role = document.getElementById('role').value;-->
+<!--    const email = document.getElementById('email').value;-->
+<!--    const password = document.getElementById('password').value;-->
+<!--    const username = document.getElementById('username').value;-->
+<!--    const age = parseInt(document.getElementById('age').value);-->
+<!--    const phone = document.getElementById('phone').value;-->
+<!--    const image = document.getElementById('image').value;-->
+
+<!--    if (userType === '' || email === '' || password === '' || username === '' || isNaN(age) || phone === '' || image === '') {-->
+<!--      document.getElementById('error-message').textContent = '모든 필수 입력 필드를 채워야 합니다.';-->
+<!--      return;-->
+<!--    }-->
+<!--    if (userType === 'organization_user' && !role) {-->
+<!--      document.getElementById('error-message').textContent = '권한을 선택해야 합니다.';-->
+<!--      return;-->
+<!--    }-->
+
+<!--    const data = {-->
+<!--      email: email,-->
+<!--      password: password,-->
+<!--      username: username,-->
+<!--      age: age,-->
+<!--      phone: phone,-->
+<!--      image: image,-->
+<!--      userType: userType,-->
+<!--      role: role || null-->
+<!--    };-->
+
+<!--    fetch('/v1/sign/signup', {-->
+<!--      method: 'POST',-->
+<!--      headers: {-->
+<!--        'Content-Type': 'application/json',-->
+<!--      },-->
+<!--      body: JSON.stringify(data),-->
+<!--    })-->
+<!--            .then(response => {-->
+<!--              if (!response.ok) {-->
+<!--                throw new Error('회원가입에 실패했습니다.');-->
+<!--              }-->
+<!--              return response.text();-->
+<!--            })-->
+<!--            .then(message => {-->
+<!--              alert(message);-->
+<!--              window.location.href = '/login'; // 회원가입 성공 후 로그인 페이지로 이동-->
+<!--            })-->
+<!--            .catch(error => {-->
+<!--              document.getElementById('error-message').textContent = error.message;-->
+<!--            });-->
+<!--  }-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
+
