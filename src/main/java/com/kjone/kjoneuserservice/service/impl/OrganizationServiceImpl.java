@@ -1,14 +1,13 @@
 package com.kjone.kjoneuserservice.service.impl;
 
 
+import com.kjone.kjoneuserservice.domain.organization.Organization_Request;
+import com.kjone.kjoneuserservice.domain.organization.Organization_Response;
 import com.kjone.kjoneuserservice.domain.organization_user.Organization_User;
 import com.kjone.kjoneuserservice.domain.request.SignRequest;
-import com.kjone.kjoneuserservice.domain.response.SignResponse;
 import com.kjone.kjoneuserservice.domain.role.Authority;
 import com.kjone.kjoneuserservice.domain.user.LoginRequest;
-import com.kjone.kjoneuserservice.domain.user.User;
 import com.kjone.kjoneuserservice.repository.OrganizationRepository;
-import com.kjone.kjoneuserservice.repository.UserRepository;
 import com.kjone.kjoneuserservice.security.cookie.CookieProvider;
 import com.kjone.kjoneuserservice.service.OrganizationService;
 import jakarta.servlet.http.Cookie;
@@ -34,21 +33,21 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     @Transactional
-    public boolean Organization_signUp(SignRequest request) throws Exception{
+    public boolean Organization_signUp(Organization_Request organizationRequest) throws Exception{
         try {
 
             // 이메일 중복 확인
-            Optional<Organization_User> existingUser = organizationRepository.findByEmail(request.getEmail());
+            Optional<Organization_User> existingUser = organizationRepository.findByEmail(organizationRequest.getEmail());
             if (existingUser.isPresent()) {
                 throw new Exception("이미 사용 중인 이메일입니다.");
             }
             Organization_User organization_user = Organization_User.builder()
-                    .email(request.getEmail())
-                    .password(passwordEncoder.encode(request.getPassword()))
-                    .name(request.getUsername())
-                    .age(request.getAge())
-                    .phone(request.getPhone())
-                    .image(request.getImage())
+                    .email(organizationRequest.getEmail())
+                    .password(passwordEncoder.encode(organizationRequest.getPassword()))
+                    .name(organizationRequest.getName())
+                    .age(organizationRequest.getAge())
+                    .phone(organizationRequest.getPhone())
+                    .image(organizationRequest.getImage())
                     .roles(Collections.singleton(Authority.USER)) // roles 필드를 설정합니다.
                     .build();
             organizationRepository.save(organization_user);
@@ -61,13 +60,13 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     // 로그인 메서드
     @Override
-    public SignResponse Organization_signIn(LoginRequest loginRequest) throws Exception {
+    public Organization_Response Organization_signIn(LoginRequest loginRequest) throws Exception {
         Organization_User organization_user = organizationRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
 
         if (passwordEncoder.matches(loginRequest.getPassword(), organization_user.getPassword())) {
-            return new SignResponse(organization_user);
+            return new Organization_Response(organization_user);
         } else {
             throw new RuntimeException("Invalid credentials");
         }
@@ -84,61 +83,61 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElse(null); // 사용자 없을 경우 null 반환
+    public Organization_User findByOrgEmail(String email) {
+        return organizationRepository.findByEmail(email).orElse(null); // 사용자 없을 경우 null 반환
     }
 
     @Override
     @Transactional
-    public void deleteUserByEmail(String email) throws Exception {
-        User user = userRepository.findByEmail(email)
+    public void deleteOrgByEmail(String email) throws Exception {
+        Organization_User organization_user = organizationRepository.findByEmail(email)
                 .orElseThrow(() -> new Exception("사용자를 찾을 수 없습니다."));
-        userRepository.delete(user);
+        organizationRepository.delete(organization_user);
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<Organization_User> getAllUsers() {
 
-        return userRepository.findAll().stream()
-                .map(user -> new User(
-                        user.getId(),
-                        user.getEmail(),
-                        user.getPassword(),
-                        user.getUsername(),
-                        user.getAge(),
-                        user.getPhone(),
-                        user.getCreateTime(),
-                        user.getUpdateTime(),
-                        user.getRoles()
+        return organizationRepository.findAll().stream()
+                .map(organization_user -> new Organization_User(
+                        organization_user.getId(),
+                        organization_user.getEmail(),
+                        organization_user.getPassword(),
+                        organization_user.getName(),
+                        organization_user.getAge(),
+                        organization_user.getPhone(),
+                        organization_user.getCreateTime(),
+                        organization_user.getUpdateTime(),
+                        organization_user.getRoles()
                 ))
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public User createProfile(Long userId, SignRequest signRequest) throws Exception {
-        User user = userRepository.findById(userId)
+    public Organization_User createProfile(Long id, Organization_Request organizationRequest) throws Exception {
+        Organization_User organization_user = organizationRepository.findById(id)
                 .orElseThrow(() -> new Exception("사용자를 찾을 수 없습니다."));
 
-        user.setUsername(signRequest.getUsername());
-        user.setAge(signRequest.getAge());
-        user.setImage(signRequest.getImage());
-        user.setUpdateTime(LocalDateTime.now());
+        organization_user.setName(organizationRequest.getName());
+        organization_user.setAge(organizationRequest.getAge());
+        organization_user.setImage(organizationRequest.getImage());
+        organization_user.setUpdateTime(LocalDateTime.now());
 
-        return userRepository.save(user);
+        return organizationRepository.save(organization_user);
     }
 
     @Override
     @Transactional
-    public User updateProfile(Long userId, SignRequest signRequest) throws Exception {
-        User user = userRepository.findById(userId)
+    public Organization_User updateProfile(Long id, Organization_Request organizationRequest) throws Exception {
+        Organization_User organization_user = organizationRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
-        user.setUsername(signRequest.getUsername());
-        user.setAge(signRequest.getAge());
-        user.setImage(signRequest.getImage());
-        user.setUpdateTime(LocalDateTime.now());
+        organization_user.setName(organizationRequest.getName());
+        organization_user.setAge(organizationRequest.getAge());
+        organization_user.setImage(organizationRequest.getImage());
+        organization_user.setUpdateTime(LocalDateTime.now());
 
-        return userRepository.save(user);
+        return organizationRepository.save(organization_user);
     }
 }
