@@ -29,7 +29,7 @@ import java.util.Set;
 import static javax.crypto.Cipher.SECRET_KEY;
 
 
-// 테스트용
+// 테스트 일반 유저
 @RestController
 @RequestMapping("/v1/sign")
 @CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
