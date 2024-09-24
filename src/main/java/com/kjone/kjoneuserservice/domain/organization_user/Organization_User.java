@@ -47,4 +47,15 @@ public class Organization_User {
     @Column(name = "role")
     private Set<Authority> roles = new HashSet<>();
 
+    public Organization_User(Long id, String email, String password, String name, int age, int phone, LocalDateTime createTime, LocalDateTime updateTime, Set<Authority> roles) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.age = age;
+        this.phone = phone;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+        this.roles = roles;
+    }
 }
