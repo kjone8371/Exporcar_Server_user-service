@@ -4,9 +4,7 @@ package com.kjone.kjoneuserservice.service;
 import com.kjone.kjoneuserservice.domain.organization.Organization_Request;
 import com.kjone.kjoneuserservice.domain.organization.Organization_Response;
 import com.kjone.kjoneuserservice.domain.organization_user.Organization_User;
-import com.kjone.kjoneuserservice.domain.request.SignRequest;
 import com.kjone.kjoneuserservice.domain.user.LoginRequest;
-import com.kjone.kjoneuserservice.domain.user.User;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;
