@@ -1,10 +1,14 @@
 package com.kjone.kjoneuserservice.controller;
 
 
+import com.kjone.kjoneuserservice.domain.organization.Organization_Request;
+import com.kjone.kjoneuserservice.domain.organization.Organization_Response;
+import com.kjone.kjoneuserservice.domain.organization_user.Organization_User;
 import com.kjone.kjoneuserservice.domain.request.SignRequest;
 import com.kjone.kjoneuserservice.domain.response.SignResponse;
 import com.kjone.kjoneuserservice.domain.role.Authority;
 import com.kjone.kjoneuserservice.domain.user.LoginRequest;
+import com.kjone.kjoneuserservice.domain.user.User;
 import com.kjone.kjoneuserservice.security.cookie.CookieProvider;
 import com.kjone.kjoneuserservice.security.jwt.JwtProvider;
 import com.kjone.kjoneuserservice.service.OrganizationService;
@@ -17,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -29,11 +34,11 @@ public class OrganizationAuthController {
 
     //로그인 메서드
     @PostMapping("/signin")
-    public ResponseEntity<?> signIn(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<?> Organization_signIn(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         try {
             // 사용자 인증
-            SignResponse signResponse = userService.signIn(loginRequest);
-            Set<Authority> roles = signResponse.getRoles();
+            Organization_Response organizationResponse = organizationService.Organization_signIn(loginRequest);
+            Set<Authority> roles = organizationResponse.getRoles();
             // JWT 토큰 생성
             String token = jwtProvider.createToken(loginRequest.getEmail(), roles);
             // 쿠키에 JWT 토큰을 설정
@@ -44,7 +49,7 @@ public class OrganizationAuthController {
 
             // 로그인 성공 후 /me 엔드포인트로 리다이렉트
             return ResponseEntity.status(HttpStatus.FOUND)  // 302 Redirect
-                    .header(HttpHeaders.LOCATION, "/v1/user/me")
+                    .header(HttpHeaders.LOCATION, "/v1/organization/me")
                     .body("로그인 되었습니다.");
         } catch (Exception e) {
             // 인증 실패 시 적절한 에러 메시지 반환
@@ -55,9 +60,9 @@ public class OrganizationAuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@RequestBody SignRequest signRequest) throws Exception {
+    public ResponseEntity<String> signUp(@RequestBody Organization_Request organizationRequest) throws Exception {
         try {
-            boolean result = organizationService.Organization_signUp(signRequest);
+            boolean result = organizationService.Organization_signUp(organizationRequest);
             if (result) {
                 return ResponseEntity.status(HttpStatus.CREATED)
                         .body("회원가입이 완료되었습니다.");
@@ -82,5 +87,22 @@ public class OrganizationAuthController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.FORBIDDEN); // 인증되지 않은 사용자 접근 시 403 반환
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteUser(@RequestParam String email) {
+        try {
+            organizationService.deleteOrgByEmail(email);
+            return new ResponseEntity<>("사용자가 삭제되었습니다.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // 모든 유저 가져오기
+    @GetMapping("/all")
+    public ResponseEntity<List<Organization_User>> getAllUsers() {
+        List<Organization_User> organizationUsers = organizationService.getAllUsers();
+        return new ResponseEntity<>(organizationUsers, HttpStatus.OK);
     }
 }
