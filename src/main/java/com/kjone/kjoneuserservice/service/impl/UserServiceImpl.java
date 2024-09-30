@@ -6,7 +6,6 @@ import com.kjone.kjoneuserservice.domain.response.SignResponse;
 import com.kjone.kjoneuserservice.domain.role.Authority;
 import com.kjone.kjoneuserservice.domain.user.LoginRequest;
 import com.kjone.kjoneuserservice.domain.user.User;
-import com.kjone.kjoneuserservice.repository.OrganizationRepository;
 import com.kjone.kjoneuserservice.repository.UserRepository;
 import com.kjone.kjoneuserservice.security.cookie.CookieProvider;
 import com.kjone.kjoneuserservice.service.UserService;
@@ -29,7 +28,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final OrganizationRepository organizationRepository;
     private final PasswordEncoder passwordEncoder;
     private final CookieProvider cookieProvider;
 
