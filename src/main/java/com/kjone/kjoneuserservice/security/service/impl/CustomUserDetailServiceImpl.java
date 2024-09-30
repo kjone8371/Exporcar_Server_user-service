@@ -1,6 +1,7 @@
 package com.kjone.kjoneuserservice.security.service.impl;
 
 
+
 import com.kjone.kjoneuserservice.domain.user.User;
 import com.kjone.kjoneuserservice.domain.user.UserForSecurity;
 import com.kjone.kjoneuserservice.repository.UserRepository;
@@ -24,5 +25,6 @@ public class CustomUserDetailServiceImpl implements CustomUserDetailService {
                 .user(user)
                 .build();
     }
+
 }
 
