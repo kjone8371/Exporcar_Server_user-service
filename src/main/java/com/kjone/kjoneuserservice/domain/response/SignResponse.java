@@ -2,7 +2,6 @@ package com.kjone.kjoneuserservice.domain.response;
 
 
 
-import com.kjone.kjoneuserservice.domain.organization_user.Organization_User;
 import com.kjone.kjoneuserservice.domain.role.Authority;
 import com.kjone.kjoneuserservice.domain.user.User;
 import lombok.AllArgsConstructor;
