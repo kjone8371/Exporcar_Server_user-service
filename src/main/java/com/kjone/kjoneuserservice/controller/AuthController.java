@@ -17,7 +17,7 @@ public class AuthController {
     public String loginPage() {
         return "login";
     }
-    test
+
 
     @GetMapping("/signup")
     public String signupPage() {
