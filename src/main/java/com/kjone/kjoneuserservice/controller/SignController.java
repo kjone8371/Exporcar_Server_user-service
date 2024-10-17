@@ -69,78 +69,6 @@ public class SignController {
     }
 
 
-//    @PostMapping("/signin")
-//    public String signIn(@RequestParam String email, @RequestParam String password, HttpServletResponse response, org.springframework.ui.Model model) {
-//        try {
-//            SignRequest signRequest = new SignRequest();
-//            signRequest.setEmail(email);
-//            signRequest.setPassword(password);
-//
-//            SignResponse signResponse = userService.signIn(signRequest);
-//            Set<Authority> roles = signResponse.getRoles();
-//
-//            String token = jwtProvider.createToken(signRequest.getEmail(), roles);
-//            cookieProvider.createCookie(response, token, 3600);
-//
-//            return "redirect:/v1/user/me";
-//        } catch (Exception e) {
-//            model.addAttribute("error", "이메일 또는 비밀번호를 다시 확인하세요. 등록되지 않은 이메일이거나, 이메일 또는 비밀번호를 잘못 입력하셨습니다.");
-//            return "login";
-//        }
-//    }
-//
-//
-//    @PostMapping("/signin")
-//    public ResponseEntity<?> signIn(@RequestParam String email, @RequestParam String password, HttpServletResponse response) {
-//        try {
-//            // SignRequest 객체 생성 및 설정
-//            SignRequest signRequest = new SignRequest();
-//            signRequest.setEmail(email);
-//            signRequest.setPassword(password);
-//
-//            // 사용자 인증
-//            SignResponse signResponse = userService.signIn(signRequest);
-//            Set<Authority> roles = signResponse.getRoles();
-//
-//            // JWT 토큰 생성
-//            String token = jwtProvider.createToken(signRequest.getEmail(), roles);
-//
-//            // 쿠키에 JWT 토큰을 설정
-//            cookieProvider.createCookie(response, token, 3600); // 1시간
-//
-//            // 로그로 쿠키 확인
-//            System.out.println("Token set in cookie: " + token);
-//
-//            // 로그인 성공 후 클라이언트 측에서 인증된 페이지를 직접 요청하도록 유도
-//            return ResponseEntity.ok("로그인 되었습니다. 인증된 페이지로 이동하세요.");
-//
-//        } catch (Exception e) {
-//            // 인증 실패 시 적절한 에러 메시지 반환
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-//                    .body("이메일 또는 비밀번호를 다시 확인하세요. 등록되지 않은 이메일이거나, 이메일 또는 비밀번호를 잘못 입력하셨습니다.");
-//        }
-//    }
-//
-//
-//     회원가입 엔드포인트
-//    @PostMapping("/signup")
-//    public ResponseEntity<String> signUp(@RequestBody SignRequest signRequest) throws Exception {
-//
-//        try {
-//            boolean result = userService.signUp(signRequest);
-//            if (result) {
-//                return ResponseEntity.status(HttpStatus.CREATED)  // 302 Redirect
-//                        .header(HttpHeaders.LOCATION, "/auth/signup")
-//                        .body("회원가입이 완료되었습니다.");
-////                return new ResponseEntity<>("회원가입이 완료되었습니다.", HttpStatus.CREATED);
-//            } else {
-//                return new ResponseEntity<>("회원가입에 실패했습니다.", HttpStatus.BAD_REQUEST);
-//            }
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//        }
-//    }
-
     @PostMapping("/signup")
     public ResponseEntity<String> signUp(@RequestBody SignRequest signRequest) throws Exception {
         try {
@@ -223,3 +151,79 @@ public class SignController {
     }
 
 }
+
+
+
+
+
+//        @PostMapping("/signin")
+//        public String signIn(@RequestParam String email, @RequestParam String password, HttpServletResponse response, org.springframework.ui.Model model) {
+//            try {
+//                SignRequest signRequest = new SignRequest();
+//                signRequest.setEmail(email);
+//                signRequest.setPassword(password);
+//
+//                SignResponse signResponse = userService.signIn(signRequest);
+//                Set<Authority> roles = signResponse.getRoles();
+//
+//                String token = jwtProvider.createToken(signRequest.getEmail(), roles);
+//                cookieProvider.createCookie(response, token, 3600);
+//
+//                return "redirect:/v1/user/me";
+//            } catch (Exception e) {
+//                model.addAttribute("error", "이메일 또는 비밀번호를 다시 확인하세요. 등록되지 않은 이메일이거나, 이메일 또는 비밀번호를 잘못 입력하셨습니다.");
+//                return "login";
+//            }
+//        }
+//
+//
+//        @PostMapping("/signin")
+//        public ResponseEntity<?> signIn(@RequestParam String email, @RequestParam String password, HttpServletResponse response) {
+//            try {
+//                // SignRequest 객체 생성 및 설정
+//                SignRequest signRequest = new SignRequest();
+//                signRequest.setEmail(email);
+//                signRequest.setPassword(password);
+//
+//                // 사용자 인증
+//                SignResponse signResponse = userService.signIn(signRequest);
+//                Set<Authority> roles = signResponse.getRoles();
+//
+//                // JWT 토큰 생성
+//                String token = jwtProvider.createToken(signRequest.getEmail(), roles);
+//
+//                // 쿠키에 JWT 토큰을 설정
+//                cookieProvider.createCookie(response, token, 3600); // 1시간
+//
+//                // 로그로 쿠키 확인
+//                System.out.println("Token set in cookie: " + token);
+//
+//                // 로그인 성공 후 클라이언트 측에서 인증된 페이지를 직접 요청하도록 유도
+//                return ResponseEntity.ok("로그인 되었습니다. 인증된 페이지로 이동하세요.");
+//
+//            } catch (Exception e) {
+//                // 인증 실패 시 적절한 에러 메시지 반환
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                        .body("이메일 또는 비밀번호를 다시 확인하세요. 등록되지 않은 이메일이거나, 이메일 또는 비밀번호를 잘못 입력하셨습니다.");
+//            }
+//        }
+//
+//
+//        회원가입 엔드포인트
+//        @PostMapping("/signup")
+//        public ResponseEntity<String> signUp(@RequestBody SignRequest signRequest) throws Exception {
+//
+//            try {
+//                boolean result = userService.signUp(signRequest);
+//                if (result) {
+//                    return ResponseEntity.status(HttpStatus.CREATED)  // 302 Redirect
+//                            .header(HttpHeaders.LOCATION, "/auth/signup")
+//                            .body("회원가입이 완료되었습니다.");
+////                return new ResponseEntity<>("회원가입이 완료되었습니다.", HttpStatus.CREATED);
+//                } else {
+//                    return new ResponseEntity<>("회원가입에 실패했습니다.", HttpStatus.BAD_REQUEST);
+//                }
+//            } catch (Exception e) {
+//                return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//            }
+//        }
