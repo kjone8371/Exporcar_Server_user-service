@@ -1,7 +1,6 @@
 package com.kjone.kjoneuserservice.controller;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kjone.kjoneuserservice.domain.request.SignRequest;
 import com.kjone.kjoneuserservice.domain.response.SignResponse;
 import com.kjone.kjoneuserservice.domain.role.Authority;
@@ -19,14 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
-import java.util.Base64;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import static javax.crypto.Cipher.SECRET_KEY;
 
 
 // 테스트 일반 유저
