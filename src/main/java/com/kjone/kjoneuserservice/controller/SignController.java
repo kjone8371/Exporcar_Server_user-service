@@ -35,7 +35,7 @@ public class SignController {
     private final UserService userService;
 
 
-    //로그인 메서드
+    //로그인
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         try {
@@ -48,7 +48,7 @@ public class SignController {
             cookieProvider.createCookie(response, token, 3600); // 1시간
 
             // 로그로 쿠키 확인
-            //System.out.println("Token set in cookie: " + token);
+            System.out.println("Token set in cookie: " + token);
 
             // 로그인 성공 후 /me 엔드포인트로 리다이렉트
             return ResponseEntity.status(HttpStatus.FOUND)  // 302 Redirect
@@ -62,7 +62,7 @@ public class SignController {
         }
     }
 
-
+    //회원가입
     @PostMapping("/signup")
     public ResponseEntity<String> signUp(@RequestBody SignRequest signRequest) throws Exception {
         try {
@@ -80,7 +80,7 @@ public class SignController {
 
 
 
-    // 로그아웃 엔드포인트
+    // 로그아웃
     @GetMapping("/signout")
     public ResponseEntity<Void> signOut(HttpServletRequest request, HttpServletResponse response) {
         // 인증된 사용자만 로그아웃을 허용
@@ -113,7 +113,7 @@ public class SignController {
 
     // 프로필 생성 엔드포인트
     @PostMapping("/{id}/profile")
-    public ResponseEntity<User> createProfile(@PathVariable Long id, @RequestBody SignRequest signRequest) {
+    public ResponseEntity<User> createProfile(@PathVariable("id") Long id, @RequestBody SignRequest signRequest) {
         try {
             User user = userService.createProfile(id, signRequest);
             return new ResponseEntity<>(user, HttpStatus.CREATED);
@@ -132,6 +132,7 @@ public class SignController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
+
 
     // JWT 테스트 엔드포인트
     @GetMapping("/test-jwt")
