@@ -26,10 +26,10 @@ public class User {
     @JsonIgnore
     private Long id;
 
-    //google이 들어감
-    private String provider;
-    //구글로 로그인한 유저의 고유 ID
-    private String providerId;
+//    //google이 들어감
+//    private String provider;
+//    //구글로 로그인한 유저의 고유 ID
+//    private String providerId;
 
     private String email;
     private String password;
