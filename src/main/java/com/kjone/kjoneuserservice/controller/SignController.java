@@ -57,7 +57,6 @@ public class SignController {
         } catch (Exception e) {
             // 인증 실패 시 적절한 에러 메시지 반환
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-
                     .body("이메일 또는 비밀번호를 다시 확인하세요. 등록되지 않은 이메일이거나, 이메일 또는 비밀번호를 잘못 입력하셨습니다.");
         }
     }
@@ -77,8 +76,6 @@ public class SignController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-
 
     // 로그아웃
     @GetMapping("/signout")
